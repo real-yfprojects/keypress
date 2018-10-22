@@ -8,35 +8,35 @@ import threading
 import os
 import time
 
-ZERO, SHIFT, ALT, CTL = [], [], [], []
-for i in range(0, 32):
-    ZERO.append(0)
-    if i == 6:
-        SHIFT.append(4)
-    else:
-        SHIFT.append(0)
-    if i == 4:
-        CTL.append(32)
-    else:
-        CTL.append(0)
-    if i == 8:
-        ALT.append(1)
-    else:
-        ALT.append(0)
 
-ignorelist = [ZERO,  ALT,  SHIFT,  CTL]
+def zero_key():
+    return [0 for i in range(0, 32)]
+
+
+IGNORED_KEYS = {
+    'ZERO': zero_key(),
+}
+
+IGNORED_KEYS['SHIFT'] = list(zero_key())
+IGNORED_KEYS['SHIFT'][6] = 4
+
+IGNORED_KEYS['CTL'] = list(zero_key())
+IGNORED_KEYS['CTL'][4] = 32
+
+IGNORED_KEYS['ALT'] = list(zero_key())
+IGNORED_KEYS['ALT'][8] = 1
 
 
 class KeyPress(threading.Thread):
     def run(self):
-        os.system("aplay sounds/key01.wav")
+        os.system('aplay sounds/key01.wav')
 
 
 def main():
-    disp = Display()
-    while 1:
-        keymap = disp.query_keymap()
-        if keymap not in ignorelist:
+    display = Display()
+    while True:
+        keymap = display.query_keymap()
+        if keymap not in IGNORED_KEYS.values():
             KeyPress().start()
             time.sleep(0.08)
 
