@@ -18,7 +18,7 @@ from Xlib.protocol import rq
 class KeyPress(threading.Thread):
 
     def run(self):
-        os.system('aplay -q sounds/key01.wav')
+        os.system('aplay -q sounds/key09.wav')
 
 
 class Listener:
